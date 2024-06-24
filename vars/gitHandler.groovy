@@ -3,7 +3,7 @@ def call(DEPLOY_ENV, REPO_URL, REPO_TOKEN, REPO_BRANCH, TELEGRAM_BOT_TOKEN, TELE
         echo "Cloning from development environment"
         try {
             // Fetch the code from the Git repository
-            git credentialsId: REPO_TOKEN, url: REPO_URL
+            git branch: REPO_BRANCH, credentialsId: REPO_TOKEN, url: REPO_URL
             sendTelegramMessage("Pull resource successfully", TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID)
         } catch (Exception e) {
             sendTelegramMessage("Pull resource failed", TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID)

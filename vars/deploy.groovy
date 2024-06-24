@@ -17,8 +17,8 @@ def call(minPort, maxPort, DOCKER_REGISTRY, IMAGE_NAME, IMAGE_TAG, CONTAINER_NAM
 
     def usedPorts = listPortsInUseForDocker(minPortValue, maxPortValue)
     if (!usedPorts.isEmpty()) {
-        echo "Ports already in use mapping, ${usedPorts.join(', ')}"
-        sendTelegramMessage("Ports already in use mapping, ${usedPorts.join(', ')}", TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID)
+        echo "Ports already in use for mapping, ${usedPorts.join(', ')}"
+        sendTelegramMessage("Ports already in use for mapping, ${usedPorts.join(', ')}", TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID)
     } 
 }
 

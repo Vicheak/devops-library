@@ -1,22 +1,23 @@
-def call(DOCKER_REGISTRY, IMAGE_NAME, IMAGE_TAG, MAIL_SEND_TO, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID) {
-    cleanDockerImage(DOCKER_REGISTRY, IMAGE_NAME, IMAGE_TAG)
+def call(DOCKER_REGISTRY, IMAGE_NAME, IMAGE_TAG, CONTAINER_NAME, MAIL_SEND_TO, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID) {
+    cleanDockerImage(DOCKER_REGISTRY, IMAGE_NAME, IMAGE_TAG, CONTAINER_NAME)
     
     try {
         buildDockerImage(DOCKER_REGISTRY, IMAGE_NAME, IMAGE_TAG)
         sendTelegramMessage("Build image successfully")
     } catch (Exception e) {
         echo "Build image failed, retrying..."
-        cleanDockerImage(DOCKER_REGISTRY, IMAGE_NAME, IMAGE_TAG)
+        cleanDockerImage(DOCKER_REGISTRY, IMAGE_NAME, IMAGE_TAG, CONTAINER_NAME)
         buildDockerImage(DOCKER_REGISTRY, IMAGE_NAME, IMAGE_TAG)
         sendTelegramMessage("Build image failed")
         throw e
     }
 }
 
-def cleanDockerImage(DOCKER_REGISTRY, IMAGE_NAME, IMAGE_TAG) {
+def cleanDockerImage(DOCKER_REGISTRY, IMAGE_NAME, IMAGE_TAG, CONTAINER_NAME) {
     sh """
         docker rmi -f ${IMAGE_NAME}:${IMAGE_TAG}
         docker rmi -f ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
+        docker rm -f ${CONTAINER_NAME}
     """
 }
 

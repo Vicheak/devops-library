@@ -5,11 +5,11 @@ def call(minPort, maxPort, DOCKER_REGISTRY, IMAGE_NAME, IMAGE_TAG, CONTAINER_NAM
 
     if (selectedPort) {
         echo "Selected port : $selectedPort"
-        sh "docker run -d -p $selectedPort:80 --name ${CONTAINER_NAME} ${DOCKER_REGISTRY}/${CONTAINER_NAME}:${IMAGE_TAG}"
-        sendGmailMessage("Deploy application on $selectedPort successfully", MAIL_SEND_TO)
-        sendTelegramMessage("Deploy application on $selectedPort successfully", TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID)
+        sh "docker run -d -p $selectedPort:80 --name ${CONTAINER_NAME} ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
+        sendGmailMessage("Deploy application on port $selectedPort successfully", MAIL_SEND_TO)
+        sendTelegramMessage("Deploy application on port $selectedPort successfully", TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID)
         def ipAddress = sh(script: 'curl -s ifconfig.me', returnStdout: true).trim()
-        def ipWithPort = "${ipAddress}:${selectedPort}"
+        def ipWithPort = "http://${ipAddress}:${selectedPort}"
         sendTelegramMessage(ipWithPort, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID)
     } else {
         error "No available ports found in the range $minPort-$maxPort"
@@ -17,8 +17,8 @@ def call(minPort, maxPort, DOCKER_REGISTRY, IMAGE_NAME, IMAGE_TAG, CONTAINER_NAM
 
     def usedPorts = listPortsInUseForDocker(minPortValue, maxPortValue)
     if (!usedPorts.isEmpty()) {
-        echo "Ports already in use mapping on port 80: ${usedPorts.join(', ')}"
-        sendTelegramMessage("Ports already in use mapping on port 80: ${usedPorts.join(', ')}", TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID)
+        echo "Ports already in use mapping, ${usedPorts.join(', ')}"
+        sendTelegramMessage("Ports already in use mapping, ${usedPorts.join(', ')}", TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID)
     } 
 }
 

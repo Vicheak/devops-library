@@ -2,7 +2,7 @@ def call(DOCKER_REGISTRY, IMAGE_NAME, IMAGE_TAG, MAIL_SEND_TO, TELEGRAM_BOT_TOKE
     cleanDockerImage(DOCKER_REGISTRY, IMAGE_NAME, IMAGE_TAG)
     
     try {
-        buildDockerImage(DOCKER_REGISTRY, BUIDL_CONTAINER_NAME, DOCKER_TAG)
+        buildDockerImage(DOCKER_REGISTRY, IMAGE_NAME, IMAGE_TAG)
         sendTelegramMessage("Build image successfully")
     } catch (Exception e) {
         echo "Build image failed, retrying..."
